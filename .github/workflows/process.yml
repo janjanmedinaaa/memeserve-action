@@ -1,0 +1,16 @@
+on:
+  repository_dispatch:
+    types: [memeserve-image-process]
+
+jobs:
+  memeserve_image_process_job:
+    runs-on: ubuntu-latest
+    name: Process Image for MemeServe
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Process Image
+        uses: ./
+        id: processor
+      - name: Get One-Time Download URL
+        run: echo "Download URL is ${{ steps.processor.outputs.file-io-url }}"

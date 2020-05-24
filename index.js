@@ -1,20 +1,28 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
+const Default = require('./src/default');
+const editor = require('./src/editor');
+
 try {
-  var userId = core.getInput('user-messenger-id');
-  var imageSrc = core.getInput('image-src');
-  var imageDescription = core.getInput('image-description');
+  var {
+    userId,
+    imageSrc,
+    imageDescription
+  } = github.context.payload.client_payload
 
-  console.log('User ID', userId);
-  console.log('Image Source', imageSrc);
-  console.log('Image Description', imageDescription);
+  let source = imageSrc || Default.MIKE_WAZOWSKI
+  let message = imageDescription || Default.ERROR_INCOMPLETE
 
-  core.setOutput('file-io-url', 'https://file.io/test');
-
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2)
-  console.log(`The event payload: ${payload}`);
+  editor.getImage(source)
+    .then(image => editor.resizeImage(image))
+    .then(resizeImage => editor.attachToCanvas(resizeImage, message))
+    .then(canvas => editor.writeToCanvas(canvas))
+    .then(writtenCanvas => writtenCanvas.getBufferAsync(Jimp.MIME_PNG))
+    .then(buffer => {
+      core.setOutput('file-io-url', 'https://file.io/test');
+      console.log('Created Buffer:', buffer);
+    })
 } catch (error) {
   core.setFailed(error.message);
 }

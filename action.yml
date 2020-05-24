@@ -1,18 +1,5 @@
 name: 'MemeServe Image Processor'
 description: 'Handles the Processing of Image for MemeServe'
-inputs:
-  user-messenger-id:
-    description: User Messenger ID
-    required: true
-    default: ${{ github.event.client_payload.user_id }}
-  image-src:
-    description: Image Source for MemeServe
-    required: true
-    default: ${{ github.event.client_payload.image_src }}
-  image-description:
-    description: Image Description for MemeServe
-    required: true
-    default: ${{ github.event.client_payload.image_description }}
 outputs:
   file-io-url:
     description: File IO One-Time Download URL

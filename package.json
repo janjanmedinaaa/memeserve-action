@@ -1,7 +1,7 @@
 {
   "name": "memeserve-action",
   "version": "1.0.0",
-  "description": "",
+  "description": "Github Action for Image Processing on MemeServe",
   "main": "index.js",
   "scripts": {
     "start": "node ."
@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@actions/core": "^1.2.4",
-    "@actions/github": "^2.2.0"
+    "@actions/github": "^2.2.0",
+    "jimp": "^0.12.1"
   }
 }

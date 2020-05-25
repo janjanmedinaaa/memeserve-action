@@ -22,7 +22,7 @@ const send = (id, url, token) => {
 
 const action = (user, action) => {
   return new Promise ((resolve, reject) => {
-    fetch(sendMessageUrl, {
+    fetch(sendUrl(token), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

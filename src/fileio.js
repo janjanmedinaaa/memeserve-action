@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const FormData = require('form-data');
 
-  const upload = async (buffer) => {
+const upload = buffer => {
   var formData = new FormData();
   formData.append('file', buffer, { filename : 'image.png' });
 

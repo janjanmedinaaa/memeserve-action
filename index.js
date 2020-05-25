@@ -4,27 +4,31 @@ const github = require('@actions/github');
 
 const Default = require('./src/default');
 const editor = require('./src/editor');
-const fileio = require('./src/fileio');
+const fileIO = require('./src/fileio');
+const messenger = require('./src/messenger');
 
-try {
-  var {
-    userId,
-    imageSrc,
-    imageDescription
-  } = github.context.payload.client_payload
+(async function() {
+  try {
+    let {
+      userId,
+      imageSrc,
+      imageDescription,
+      accessToken
+    } = github.context.payload.client_payload
+  
+    let source = imageSrc || Default.MIKE_WAZOWSKI
+    let message = imageDescription || Default.ERROR_INCOMPLETE
+  
+    let downloadImage = await editor.getImage(source)
+    let resizeImage = await editor.resizeImage(downloadImage)
+    let canvas = await editor.attachToCanvas(resizeImage, message)
+    let writtenCanvas = await editor.writeToCanvas(canvas)
+    let imageBuffer = await writtenCanvas.getBufferAsync(Jimp.MIME_PNG)
 
-  let source = imageSrc || Default.MIKE_WAZOWSKI
-  let message = imageDescription || Default.ERROR_INCOMPLETE
-
-  editor.getImage(source)
-    .then(image => editor.resizeImage(image))
-    .then(resizeImage => editor.attachToCanvas(resizeImage, message))
-    .then(canvas => editor.writeToCanvas(canvas))
-    .then(writtenCanvas => writtenCanvas.getBufferAsync(Jimp.MIME_PNG))
-    .then(async (buffer) => {
-      const upload = await fileio.upload(buffer);
-      core.setOutput('file-io-url', upload.link);
-    })
-} catch (error) {
-  core.setFailed(error.message);
-}
+    let fileUpload = await fileIO.upload(imageBuffer);
+    core.setOutput('file-io-url', fileUpload.link);
+    await messenger.send(userId, fileUpload.link, accessToken);
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+})()

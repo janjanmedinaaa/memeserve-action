@@ -29,7 +29,10 @@ const send = (id, url, token) => {
       }
     })
     .then(res => res.json())
-    .then(result => resolve(result))
+    .then(result => {
+      resolve(result)
+      console.log('Send Message:', result)
+    })
     .catch(e => reject(e))
   })
 }

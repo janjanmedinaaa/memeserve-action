@@ -26,8 +26,8 @@ const messenger = require('./src/messenger');
     let imageBuffer = await writtenCanvas.getBufferAsync(Jimp.MIME_PNG)
 
     let fileUpload = await fileIO.upload(imageBuffer);
-    core.setOutput('file-io-url', fileUpload.link);
     await messenger.send(userId, fileUpload.link, accessToken);
+    core.setOutput('file-io-url', fileUpload.link);
   } catch (error) {
     core.setFailed(error.message);
   }

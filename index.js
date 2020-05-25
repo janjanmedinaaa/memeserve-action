@@ -15,7 +15,6 @@ const messenger = require('./src/messenger');
       imageDescription,
       accessToken
     } = github.context.payload.client_payload
-    console.log(github.context.payload)
   
     let source = imageSrc || Default.MIKE_WAZOWSKI
     let message = imageDescription || Default.ERROR_INCOMPLETE
@@ -27,7 +26,10 @@ const messenger = require('./src/messenger');
     let imageBuffer = await writtenCanvas.getBufferAsync(Jimp.MIME_PNG)
 
     let fileUpload = await fileIO.upload(imageBuffer);
-    await messenger.send(userId, fileUpload.link, accessToken);
+
+    let sendToMessenger = await messenger.send(userId, fileUpload.link, accessToken);
+    console.log('Send to Messenger:', sendToMessenger);
+
     core.setOutput('file-io-url', fileUpload.link);
   } catch (error) {
     core.setFailed(error.message);

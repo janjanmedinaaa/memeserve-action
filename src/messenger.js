@@ -26,13 +26,10 @@ const send = (id, url, token) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: attachment(id, url)
+      body: JSON.stringify(attachment(id, url))
     })
     .then(res => res.json())
-    .then(result => {
-      resolve(result)
-      console.log('Send Message:', result)
-    })
+    .then(result => resolve(result))
     .catch(e => reject(e))
   })
 }

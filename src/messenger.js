@@ -20,7 +20,7 @@ const send = (id, url, token) => {
   })
 }
 
-const action = (user, action) => {
+const action = (user, action, token) => {
   return new Promise ((resolve, reject) => {
     fetch(sendUrl(token), {
       method: 'POST',

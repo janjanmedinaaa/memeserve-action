@@ -27,6 +27,11 @@ const MARGIN = MARGIN_TOTAL / 2
  */
 const MINIMUM_WIDTH = 400
 
+/**
+ * Messenger Actions
+ */
+const TYPING = 'typing_on';
+
 module.exports = {
   MIKE_WAZOWSKI,
   MR_CHOW_TINY,
@@ -43,5 +48,7 @@ module.exports = {
   MARGIN_TOTAL,
   MARGIN,
 
-  MINIMUM_WIDTH
+  MINIMUM_WIDTH,
+
+  TYPING
 }

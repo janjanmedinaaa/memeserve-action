@@ -19,6 +19,8 @@ const messenger = require('./src/messenger');
     let source = imageSrc || Default.MIKE_WAZOWSKI
     let message = imageDescription || Default.ERROR_INCOMPLETE
   
+    await messenger.action(userId, Default.TYPING);
+
     let downloadImage = await editor.getImage(source)
     let resizeImage = await editor.resizeImage(downloadImage)
     let canvas = await editor.attachToCanvas(resizeImage, message)

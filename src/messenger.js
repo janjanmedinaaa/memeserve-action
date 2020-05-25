@@ -1,23 +1,9 @@
 const fetch = require('node-fetch');
+const format = require('./format');
 
 const BASE_URL = 'https://graph.facebook.com/v7.0/me/messages';
 
 const sendUrl = (token) => `${BASE_URL}?access_token=${token}`;
-
-const attachment = (id, url) => {
-  return {
-    recipient: { id },
-    message: {
-      attachment: {
-        type: 'image', 
-        payload: {
-          url, 
-          is_reusable: true
-        }
-      }
-    }
-  }
-}
 
 const send = (id, url, token) => {
   return new Promise ((resolve, reject) => {
@@ -26,7 +12,7 @@ const send = (id, url, token) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(attachment(id, url))
+      body: JSON.stringify(format.attachment(id, url))
     })
     .then(res => res.json())
     .then(result => resolve(result))
@@ -34,6 +20,22 @@ const send = (id, url, token) => {
   })
 }
 
+const action = (user, action) => {
+  return new Promise ((resolve, reject) => {
+    fetch(sendMessageUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(format.action(user, action))
+    })
+    .then(res => res.json())
+    .then(result => resolve(result))
+    .catch(e => reject(e));
+  });
+}
+
 module.exports = {
-  send
+  send,
+  action
 }

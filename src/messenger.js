@@ -23,10 +23,10 @@ const send = (id, url, token) => {
   return new Promise ((resolve, reject) => {
     fetch(sendUrl(token), {
       method: 'post',
-      body: attachment(id, url),
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
+      body: attachment(id, url)
     })
     .then(res => res.json())
     .then(result => {

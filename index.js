@@ -4,6 +4,7 @@ const github = require('@actions/github');
 
 const Default = require('./src/default');
 const editor = require('./src/editor');
+const fileio = require('./src/fileio');
 
 try {
   var {
@@ -19,12 +20,11 @@ try {
     .then(image => editor.resizeImage(image))
     .then(resizeImage => editor.attachToCanvas(resizeImage, message))
     .then(canvas => editor.writeToCanvas(canvas))
-    .then(writtenCanvas => writtenCanvas.write('save.png'))
-    // .then(writtenCanvas => writtenCanvas.getBufferAsync(Jimp.MIME_PNG))
-    // .then(buffer => {
-    //   core.setOutput('file-io-url', 'https://file.io/test');
-    //   console.log('Created Buffer:', buffer);
-    // })
+    .then(writtenCanvas => writtenCanvas.getBufferAsync(Jimp.MIME_PNG))
+    .then(async (buffer) => {
+      const upload = await fileio.upload(buffer);
+      core.setOutput('file-io-url', upload.link);
+    })
 } catch (error) {
   core.setFailed(error.message);
 }

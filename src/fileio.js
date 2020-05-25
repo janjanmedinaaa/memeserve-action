@@ -1,18 +1,20 @@
 const fetch = require('node-fetch');
 const FormData = require('form-data');
-const { createReadStream } = require('fs');
 
-const upload = (buffer) => {
-  const stream = createReadStream('./images/chow.jpg');
+  const upload = async (buffer) => {
+  var formData = new FormData();
+  formData.append('file', buffer, { filename : 'image.png' });
 
-  fetch('https://file.io', {
-    method: 'POST',
-    body: { file: buffer }
+  return new Promise((resolve, reject) => {
+    fetch('https://file.io', {
+      method: 'POST',
+      body: formData,
+      headers: formData.getHeaders()
+    })
+    .then(res => res.json())
+    .then(json => resolve(json))
+    .catch(e => reject(e));
   })
-  .then(res => res.json())
-  .then(function(json) {
-    console.log(json);
-  });
 }
 
 module.exports = {
